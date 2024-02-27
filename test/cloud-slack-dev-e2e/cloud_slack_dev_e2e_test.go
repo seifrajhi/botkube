@@ -363,6 +363,7 @@ func TestCloudSlackE2E(t *testing.T) {
 			return strings.Contains(msg, fmt.Sprintf("Botkube instance %q is now active.", deployment.Name)), 0, ""
 		}
 		err = tester.WaitForMessagePosted(tester.BotUserID(), channel.ID(), 3, assertionFn)
+		require.NoError(t, err)
 
 		cmdHeader := func(command string) string {
 			return fmt.Sprintf("`%s` on `%s`", command, deployment.Name)
@@ -456,7 +457,7 @@ func TestCloudSlackE2E(t *testing.T) {
 					fmt.Sprintf("The 'latest' tag used in 'nginx:latest' image of Pod '%s/%s' container 'nginx' should be avoided.", pod.Namespace, pod.Name),
 				}
 
-				var result = true
+				result := true
 				for _, str := range expStrings {
 					if !strings.Contains(msg, str) {
 						result = false
@@ -688,7 +689,7 @@ func screenshotIfShould(t *testing.T, cfg E2ESlackConfig, page *rod.Page) {
 		return
 	}
 
-	err = os.WriteFile(filePath, data, 0644)
+	err = os.WriteFile(filePath, data, 0o644)
 	assert.NoError(t, err)
 }
 
